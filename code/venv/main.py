@@ -2,13 +2,13 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.animation import FFMpegWriter
-mpl.rcParams['animation.ffmpeg_path'] = r"S:\ffmpeg\ffmpeg-master-latest-win64-gpl\ffmpeg-master-latest-win64-gpl\bin\ffmpeg.exe"
+# mpl.rcParams['animation.ffmpeg_path'] = r"ffmpeg.exe"
 import numpy as np
 import time
 import os
 
 '''
-BRS Motorsport: Melexis (768 -> 32x24)
+BRS Motorsport: Melexis (768 -> 32x24 ; 16Hz ; RES: 19 Bit)
 '''
 
 # original_data = np.random.randint(0, 100, size=32*24*16*10)
@@ -72,7 +72,15 @@ def heatmap_video(data: np.array, size: (int, int), vmin: float, vmax: float, fr
     anim = animation.FuncAnimation(fig, animate, init_func=init, frames=frames, interval=1.0/frequency, repeat=False)
     plt.colorbar()
     if(save):
-        filename = r"S:\BRS Motorsport\workplace_priv\heatmap.mp4"
+        dir_list = os.listdir()
+        filename = "heatmap"
+        filename_type = filename + ".mp4"
+        filename_index = 0
+        while filename_type in dir_list:
+            filename += str(filename_index)
+            filename_type = filename + ".mp4"
+            filename_index += 1
+        filename += ".mp4"
         writer = animation.FFMpegWriter(fps=frequency)
         anim.save(filename, writer=writer)
     else:
